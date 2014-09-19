@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<resources>
+
+    <string name="explore">探索</string>
+    <string name="group">圈子</string>
+    <string name="calendar">日历</string>
+    <string name="message">消息</string>
+    <string name="me">俺的</string>
+
+    <string name="Fragment1">This is ActionBarSherlock Fragment 1</string>
+    <string name="Fragment2">This is ActionBarSherlock Fragment 2</string>
+    <string name="Fragment3">This is ActionBarSherlock Fragment 3</string>
+
+    <string name="hello_world">Hello World</string>
+    <string name="application_name">ActionBarSherlock Demos</string>
+    <string name="app_name">SimaMeet</string>
+    <string name="home_page">MainPage</string>
+
+
+</resources>

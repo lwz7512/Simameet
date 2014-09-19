@@ -1,0 +1,8 @@
+<resources>
+
+    <!-- Base application theme. -->
+    <style name="Sherlock_custom_tab" parent="Theme.Sherlock.Light">
+        <item name="android:actionBarSize">64dp</item>
+    </style>
+
+</resources>

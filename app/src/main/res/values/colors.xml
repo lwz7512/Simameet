@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<resources>
+	<drawable name="ab_bg_black">#aa000000</drawable>
+    <drawable name="gray">#77dddddd</drawable>
+    <drawable name="gray_darker_same_as_txt">#ff969696</drawable>
+    <drawable name="gray_darker">#ff757575</drawable>
+
+    <color name="menu_textColor_selected">#ffe74242</color>
+    <color name="menu_textColor_unselected">#ff757575</color>
+</resources>
