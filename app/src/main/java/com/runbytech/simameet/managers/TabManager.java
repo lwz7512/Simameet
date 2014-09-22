@@ -58,6 +58,13 @@ public class TabManager implements TabHost.OnTabChangeListener {
         }
     }
 
+    /**
+     * constructor
+     *
+     * @param activity
+     * @param tabHost
+     * @param containerId
+     */
     public TabManager(FragmentActivity activity, TabHost tabHost, int containerId) {
         mActivity = activity;
         mTabHost = tabHost;
@@ -92,7 +99,7 @@ public class TabManager implements TabHost.OnTabChangeListener {
             FragmentTransaction ft = mActivity.getSupportFragmentManager().beginTransaction();
             if (mLastTab != null) {
                 if (mLastTab.fragment != null) {
-                    ft.detach(mLastTab.fragment);
+                    ft.detach(mLastTab.fragment);//remove old
                 }
             }
             if (newTab != null) {
@@ -101,7 +108,7 @@ public class TabManager implements TabHost.OnTabChangeListener {
                             newTab.clss.getName(), newTab.args);
                     ft.add(mContainerId, newTab.fragment, newTab.tag);
                 } else {
-                    ft.attach(newTab.fragment);
+                    ft.attach(newTab.fragment);//add new
                 }
             }
 

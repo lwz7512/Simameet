@@ -16,16 +16,21 @@
 package com.runbytech.simameet;
 
 
+import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.TabHost;
-import android.widget.TextView;
 import android.widget.Toast;
 
-import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.SherlockFragmentActivity;
-import com.runbytech.simameet.fragments.FragmentTab1;
+import com.runbytech.simameet.fragments.CalendarFrg;
+import com.runbytech.simameet.fragments.ExploreFrg;
+import com.runbytech.simameet.fragments.GroupFrg;
+import com.runbytech.simameet.fragments.MessageFrg;
+import com.runbytech.simameet.fragments.MineFrg;
 import com.runbytech.simameet.managers.TabManager;
+import com.runbytech.simameet.ui.BlankActivity;
 import com.runbytech.simameet.utils.TabUtils;
 
 /**
@@ -45,10 +50,17 @@ public class HomePageTabs extends SherlockFragmentActivity {
 
         setContentView(R.layout.fragment_tabs);
 
+        //hide app title
+//        getSupportActionBar().setDisplayShowTitleEnabled(false);
+
+        //hide app logo
         getSupportActionBar().setDisplayShowHomeEnabled(false);
-        getSupportActionBar().setDisplayShowCustomEnabled(true);
-        getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
-        getSupportActionBar().setCustomView(R.layout.cener_title);
+
+
+        //custom header bar
+//        getSupportActionBar().setDisplayShowCustomEnabled(true);
+//        getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
+//        getSupportActionBar().setCustomView(R.layout.cener_title);
 
         addTabs(savedInstanceState);
 
@@ -63,26 +75,30 @@ public class HomePageTabs extends SherlockFragmentActivity {
         mTabManager = new TabManager(this, mTabHost, R.id.realtabcontent){
             @Override
             public void onTabChanged(String tag) {
-                changeTitle(tag);
+                super.onTabChanged(tag);
+
+
+                switchMainTabContent(tag);
             }
         };
 
 
         View explore = this.getLayoutInflater().inflate(R.layout.tab_menu_explore, null);
-        mTabManager.addTab(mTabHost.newTabSpec("1").setIndicator(explore),FragmentTab1.class, null);
+        mTabManager.addTab(mTabHost.newTabSpec("explore").setIndicator(explore),ExploreFrg.class, null);
 
         View group = this.getLayoutInflater().inflate(R.layout.tab_menu_group, null);
-        mTabManager.addTab(mTabHost.newTabSpec("2").setIndicator(group),FragmentTab1.class, null);
+        mTabManager.addTab(mTabHost.newTabSpec("group").setIndicator(group), GroupFrg.class, null);
 
         View calendar = this.getLayoutInflater().inflate(R.layout.tab_menu_calendar, null);
-        mTabManager.addTab(mTabHost.newTabSpec("3").setIndicator(calendar),FragmentTab1.class, null);
+        mTabManager.addTab(mTabHost.newTabSpec("calendar").setIndicator(calendar), CalendarFrg.class, null);
 
         //add badge
-        View message = TabUtils.renderTabView(this,R.layout.tab_menu_message,23);
-        mTabManager.addTab(mTabHost.newTabSpec("4").setIndicator(message),FragmentTab1.class, null);
+        //View message = TabUtils.renderTabView(this,R.layout.tab_menu_message,23);
+        View message = this.getLayoutInflater().inflate(R.layout.tab_menu_message, null);
+        mTabManager.addTab(mTabHost.newTabSpec("message").setIndicator(message),MessageFrg.class, null);
 
         View me = this.getLayoutInflater().inflate(R.layout.tab_menu_me, null);
-        mTabManager.addTab(mTabHost.newTabSpec("5").setIndicator(me),FragmentTab1.class, null);
+        mTabManager.addTab(mTabHost.newTabSpec("me").setIndicator(me), MineFrg.class, null);
 
 
         if (savedInstanceState != null) {
@@ -91,10 +107,17 @@ public class HomePageTabs extends SherlockFragmentActivity {
     }
 
 
+
+    private void switchMainTabContent(String tag) {
+        //TODO, ...?
+
+    }
+
+
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putString("tab", mTabHost.getCurrentTabTag());//save last tab while invisible
+//        outState.putString("tab", mTabHost.getCurrentTabTag());//save last tab while invisible
     }
 
 
@@ -105,8 +128,8 @@ public class HomePageTabs extends SherlockFragmentActivity {
     }
 
     private void changeTitle(String msg) {
-        TextView title = (TextView) findViewById(R.id.custom_bar_title);
-        title.setText(msg);
+//        TextView title = (TextView) findViewById(R.id.custom_bar_title);
+//        title.setText(msg);
     }
 
 

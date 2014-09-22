@@ -7,13 +7,13 @@ import android.view.ViewGroup;
 import com.actionbarsherlock.app.SherlockFragment;
 import com.runbytech.simameet.R;
 
-public class FragmentTab1 extends SherlockFragment {
+public class MessageFrg extends SherlockFragment {
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
-		// Get the view from fragmenttab1.xml
-		View view = inflater.inflate(R.layout.fragmenttab1, container, false);
+		// Get the view from fragmenttab3.xml
+		View view = inflater.inflate(R.layout.fragment_message, container, false);
 		return view;
 	}
 
