@@ -8,4 +8,7 @@
 
     <color name="menu_textColor_selected">#ffe74242</color>
     <color name="menu_textColor_unselected">#ff757575</color>
+
+    <color name="button_background_selected">#ffe74242</color>
+    <color name="button_background_unselected">#FF6347</color>
 </resources>

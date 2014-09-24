@@ -38,4 +38,10 @@
     <uses-permission android:name="android.permission.READ_PROFILE" />
     <uses-permission android:name="android.permission.READ_CONTACTS" />
 
+    <!--to get device id-->
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+
+    <!--access internet-->
+    <uses-permission android:name="android.permission.INTERNET" />
+
 </manifest>
