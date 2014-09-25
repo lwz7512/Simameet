@@ -38,7 +38,8 @@
                     android:hint="@string/prompt_email"
                     android:inputType="textEmailAddress"
                     android:maxLines="1"
-                    android:singleLine="true"/>
+                    android:singleLine="true"
+                    android:imeOptions="actionNext"/>
 
                 <EditText
                     android:id="@+id/password"

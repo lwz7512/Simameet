@@ -4,11 +4,17 @@ package com.runbytech.simameet.vo;
  * Created by liwenzhi on 14-9-24.
  */
 public class GatewayParams {
-
+    /**
+     * client connect use
+     */
     private String appServerIp;
-    
+    /**
+     * client connect use
+     */
     private int appServerPort;
-
+    /**
+     * client login use
+     */
     private String appToken;
 
     public String getAppServerIp() {

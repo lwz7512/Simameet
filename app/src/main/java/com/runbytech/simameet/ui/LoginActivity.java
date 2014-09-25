@@ -65,6 +65,16 @@ public class LoginActivity extends SherlockActivity implements LoaderCallbacks<C
 
         // Set up the login form.
         mEmailView = (AutoCompleteTextView) findViewById(R.id.email);
+        //accept soft keyboard event, to goNext text view
+        mEmailView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if (EditorInfo.IME_ACTION_NEXT == actionId){
+                    mPasswordView.requestFocus();
+                }
+                return true;
+            }
+        });
         populateAutoComplete();
 
         mPasswordView = (EditText) findViewById(R.id.password);
@@ -136,7 +146,7 @@ public class LoginActivity extends SherlockActivity implements LoaderCallbacks<C
 
 
         // Check for a valid password, if the user entered one.
-        if (!TextUtils.isEmpty(password) && !isPasswordValid(password)) {
+        if (TextUtils.isEmpty(password) || !isPasswordValid(password)) {
             mPasswordView.setError(getString(R.string.error_invalid_password));
             focusView = mPasswordView;
             cancel = true;
@@ -153,6 +163,7 @@ public class LoginActivity extends SherlockActivity implements LoaderCallbacks<C
             cancel = true;
         }
 
+
         if (cancel) {
             // There was an error; don't attempt login and focus the first
             // form field with an error.
@@ -164,6 +175,9 @@ public class LoginActivity extends SherlockActivity implements LoaderCallbacks<C
             mAuthTask = new UserLoginTask(email, password){
 
                 public void callback(){
+                    HomeApp.loggedOn(true);
+                    HomeApp.setGuestMode(false);
+
                     mAuthTask = null;
                     showProgress(false);
                     close();
@@ -181,11 +195,6 @@ public class LoginActivity extends SherlockActivity implements LoaderCallbacks<C
             };
             mAuthTask.execute((Void) null);
         }
-    }
-
-
-    private void close(){
-        finish();
     }
 
     private boolean isEmailValid(String email) {
@@ -289,14 +298,19 @@ public class LoginActivity extends SherlockActivity implements LoaderCallbacks<C
     }
 
 
-
     @Override
     public  void onBackPressed(){
         super.onBackPressed();
 
-        HomeApp.openGuestMode();
-
+        HomeApp.setGuestMode(false);//manually set app account mode, do not log in
     }
+
+
+
+    private void close(){
+        finish();
+    }
+
 
 }
 

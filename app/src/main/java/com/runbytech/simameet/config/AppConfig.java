@@ -1,5 +1,7 @@
 package com.runbytech.simameet.config;
 
+import com.runbytech.simameet.vo.AccountParams;
+
 /**
  * Created by liwenzhi on 14-9-24.
  */
@@ -19,5 +21,9 @@ public class AppConfig {
 
     public static String APP_VERSION = "Sweden-0.0.1";
 
+    /**
+     * initialized in UserLoginTask;
+     */
+    public static AccountParams account;
 
 }

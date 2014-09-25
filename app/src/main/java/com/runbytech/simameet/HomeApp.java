@@ -16,32 +16,25 @@ import com.runbytech.simameet.utils.DeviceUtil;
  */
 public class HomeApp extends Application {
 
+    /**
+     * any possible exits? may be removed in future...
+     */
     private static boolean LOGGED_ON = false;
 
-    private static boolean GUEST_MODE = false;
+    /**
+     * initially user not logged on, it's GUEST mode is true,
+     * after successful logged on, this value is set to false;
+     */
+    private static boolean GUEST_MODE = true;
 
     // 应用上下文
     public static Context mContext;
 
-
-    //server returned app ip
-    public static String APP_IP;
-
-    //server returned app port
-    public static int APP_PORT;
-
-    //server returned token
-    public static String TOKEN;
-
-    //logged on user account id
-    public static String ACCOUNT_ID;
-
-
-    //for app later use
+    /**
+     * initialized in ServerConfigTask;
+     */
     public static StpClient api;
 
-
-    private ServerConfigTask server;
 
 
     @Override
@@ -56,47 +49,23 @@ public class HomeApp extends Application {
         AppConfig.OS_VERSION = DeviceUtil.getDeviceOS();
         Log.d("mina", "os: "+AppConfig.OS_VERSION);
 
-        //use default...
-        //AppConfig.VENDOR = DeviceUtil.getDeviceManufacture();
-        //Log.d("mina", "vendor: "+AppConfig.VENDOR);
-
-        getServerConfig();
     }
 
-
-
-    private void getServerConfig() {
-        //for ui operation to hint user
-        server = new ServerConfigTask(){
-            public void callback(){
-                Log.d("mina", "server config execute success!");
-                showToast("server conntected!");
-            }
-            public void pullback(){
-                Log.d("mina", "server config execute cancel!");
-            }
-            public void failure(){
-                Log.d("mina", "server config execute failure!");
-            }
-        };
-        server.execute();
-        Log.d("mina", "fetching server token...");
-    }
 
     public static void loggedOn(boolean logon) {
         LOGGED_ON = logon;
     }
 
     public static boolean isLoggedOn() {
-        //used in production evironment
+//        TODO, used in production environment
 //        SharedPreferences sp = mContext.getSharedPreferences("SP", Activity.MODE_PRIVATE);
 //        LOGGED_ON = sp.getBoolean("LOGGED_ON", false);
         
         return LOGGED_ON;
     }
 
-    public static void openGuestMode(){
-        GUEST_MODE = true;
+    public static void setGuestMode(boolean mode){
+        GUEST_MODE = mode;
     }
 
     public static boolean checkGuestMode(){
@@ -106,7 +75,6 @@ public class HomeApp extends Application {
 
     private void showToast(String msg) {
         Toast.makeText(mContext, msg, Toast.LENGTH_SHORT).show();
-
     }
 
 

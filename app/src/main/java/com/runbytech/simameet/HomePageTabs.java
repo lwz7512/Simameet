@@ -16,9 +16,8 @@
 package com.runbytech.simameet;
 
 
-import android.content.Intent;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.TabHost;
 import android.widget.Toast;
@@ -30,8 +29,7 @@ import com.runbytech.simameet.fragments.GroupFrg;
 import com.runbytech.simameet.fragments.MessageFrg;
 import com.runbytech.simameet.fragments.MineFrg;
 import com.runbytech.simameet.managers.TabManager;
-import com.runbytech.simameet.ui.BlankActivity;
-import com.runbytech.simameet.utils.TabUtils;
+import com.runbytech.simameet.tasks.ServerConfigTask;
 
 /**
  * This demonstrates how you can implement switching between the tabs of a
@@ -42,6 +40,8 @@ public class HomePageTabs extends SherlockFragmentActivity {
 
     TabHost mTabHost;
     TabManager mTabManager;
+
+    private ServerConfigTask getServer;
 
 
     @Override
@@ -67,6 +67,35 @@ public class HomePageTabs extends SherlockFragmentActivity {
     }
 
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        if(getServer==null) getServerConfig();
+
+    }
+
+
+
+    private void getServerConfig() {
+        //for ui operation to hint user
+        getServer = new ServerConfigTask(){
+            public void callback(){
+                Log.d("mina", "server config execute success!");
+                showToast("server conntected!");
+            }
+            public void pullback(){
+                Log.d("mina", "server config execute cancel!");
+            }
+            public void failure(){
+                Log.d("mina", "server config execute failure!");
+            }
+        };
+        getServer.execute();
+        Log.d("mina", "fetching server token...");
+
+        showToast("connecting server...");
+    }
 
     private void addTabs(Bundle savedInstanceState){
         mTabHost = (TabHost)findViewById(android.R.id.tabhost);
@@ -76,9 +105,6 @@ public class HomePageTabs extends SherlockFragmentActivity {
             @Override
             public void onTabChanged(String tag) {
                 super.onTabChanged(tag);
-
-
-                switchMainTabContent(tag);
             }
         };
 
@@ -107,31 +133,16 @@ public class HomePageTabs extends SherlockFragmentActivity {
     }
 
 
-
-    private void switchMainTabContent(String tag) {
-        //TODO, ...?
-
-    }
-
-
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-//        outState.putString("tab", mTabHost.getCurrentTabTag());//save last tab while invisible
+        outState.putString("tab", mTabHost.getCurrentTabTag());//save last tab while invisible
     }
-
 
 
     private void showToast(String msg) {
-        Toast.makeText(this, "onOptionsItemSelected: " + msg,
-                Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
     }
-
-    private void changeTitle(String msg) {
-//        TextView title = (TextView) findViewById(R.id.custom_bar_title);
-//        title.setText(msg);
-    }
-
 
 }
 

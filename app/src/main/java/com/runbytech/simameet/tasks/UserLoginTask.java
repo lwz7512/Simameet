@@ -12,6 +12,7 @@ import com.runbytech.simameet.HomeApp;
 import com.runbytech.simameet.config.AppConfig;
 import com.runbytech.simameet.config.ServiceConfig;
 import com.runbytech.simameet.utils.DeviceUtil;
+import com.runbytech.simameet.vo.AccountParams;
 
 import java.io.UnsupportedEncodingException;
 
@@ -33,10 +34,8 @@ public class UserLoginTask extends TemplateTask{
 
     @Override
     protected Boolean doInBackground(Void... params) {
-        // TODO: attempt authentication against a network service.
-
         LoginReq req = new LoginReq();
-        req.setApnsToken("54321");//unknown...
+        req.setApnsToken("android_no_apn_token_currently");
         req.setEmail(mEmail);
         req.setGateToken(ServiceConfig.gateway.getAppToken());
         req.setMyDeviceId(AppConfig.DEVICE_ID);
@@ -45,18 +44,26 @@ public class UserLoginTask extends TemplateTask{
         req.setSequence((int)System.currentTimeMillis()/1000);
 
         try {
-            if(HomeApp.api == null) return false;
+            if(HomeApp.api == null) {
+                Log.e("sima", "api is null!");
+                return false;
+            }
 
             LoginResp resp = (LoginResp) HomeApp.api.send(req);
+            if(resp==null) return false;//log in failure!
 
-            String account = resp.getAccountId();
-            Log.d("mina", "account logged on: " + account);
+            String accountId = resp.getAccountId();
+            Log.d("sima", "account logged on: " + accountId);
 
-            //remember returned value
-            HomeApp.ACCOUNT_ID = account;
+            String sessionId = resp.getSessionToken();
+            Log.d("sima", "session id: "+sessionId);
 
-            if(account==null) return false;//log in failure!
+            AccountParams account = new AccountParams();
+            account.setAccountId(accountId);
+            account.setSessionId(sessionId);
 
+            //save the newly logged on user
+            AppConfig.account = account;
 
         } catch (InterruptedException e) {
             e.printStackTrace();
@@ -66,7 +73,6 @@ public class UserLoginTask extends TemplateTask{
             return false;
         }
 
-        // TODO: register the new account here.
         return true;
     }
 
