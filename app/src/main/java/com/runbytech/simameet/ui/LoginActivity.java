@@ -33,6 +33,7 @@ import com.actionbarsherlock.app.SherlockActivity;
 import com.runbytech.simameet.HomeApp;
 import com.runbytech.simameet.R;
 import com.runbytech.simameet.tasks.UserLoginTask;
+import com.runbytech.simameet.utils.EncryptUtil;
 
 
 /**
@@ -140,6 +141,8 @@ public class LoginActivity extends SherlockActivity implements LoaderCallbacks<C
         // Store values at the time of the login attempt.
         String email = mEmailView.getText().toString();
         String password = mPasswordView.getText().toString();
+        //FIXME, MD5 encrypt@2014/09/25
+        password = EncryptUtil.md5(password);
 
         boolean cancel = false;
         View focusView = null;
@@ -169,6 +172,7 @@ public class LoginActivity extends SherlockActivity implements LoaderCallbacks<C
             // form field with an error.
             focusView.requestFocus();
         } else {
+            //*************** execute login request **********************
             // Show a progress spinner, and kick off a background task to
             // perform the user login attempt.
             showProgress(true);

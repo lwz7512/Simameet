@@ -53,10 +53,13 @@ public class UserLoginTask extends TemplateTask{
             if(resp==null) return false;//log in failure!
 
             String accountId = resp.getAccountId();
-            Log.d("sima", "account logged on: " + accountId);
+            Log.d("sima", "account_id: " + accountId);
 
             String sessionId = resp.getSessionToken();
             Log.d("sima", "session id: "+sessionId);
+
+            int state = resp.getRespState();
+            Log.d("sima", "state value: "+state);
 
             AccountParams account = new AccountParams();
             account.setAccountId(accountId);
