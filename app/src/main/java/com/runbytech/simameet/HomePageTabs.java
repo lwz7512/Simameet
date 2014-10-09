@@ -30,6 +30,11 @@ import com.runbytech.simameet.fragments.MessageFrg;
 import com.runbytech.simameet.fragments.MineFrg;
 import com.runbytech.simameet.managers.TabManager;
 import com.runbytech.simameet.tasks.ServerConfigTask;
+import com.runbytech.simameet.utils.FileLogger;
+
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Iterator;
 
 /**
  * This demonstrates how you can implement switching between the tabs of a
@@ -38,9 +43,9 @@ import com.runbytech.simameet.tasks.ServerConfigTask;
  */
 public class HomePageTabs extends SherlockFragmentActivity {
 
-    TabHost mTabHost;
-    TabManager mTabManager;
-
+    private TabHost mTabHost;
+    private TabManager mTabManager;
+    private HashMap<String, View> tabs;
     private ServerConfigTask getServer;
 
 
@@ -64,17 +69,23 @@ public class HomePageTabs extends SherlockFragmentActivity {
 
         addTabs(savedInstanceState);
 
+        if(HomeApp.checkGuestMode()) getServerConfig();//not logged on
+    }
+
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+//        HomeApp.setGuestMode(true);
+        FileLogger.writeLogFileToSDCard("INFO: app terminated!");
     }
 
 
     @Override
     protected void onResume() {
         super.onResume();
-
-        if(getServer==null) getServerConfig();
-
+        if (!HomeApp.checkGuestMode()) lockTabButton(false);//logged on
     }
-
 
 
     private void getServerConfig() {
@@ -83,6 +94,7 @@ public class HomePageTabs extends SherlockFragmentActivity {
             public void callback(){
                 Log.d("mina", "server config execute success!");
                 showToast("server conntected!");
+                lockTabButton(false);
             }
             public void pullback(){
                 Log.d("mina", "server config execute cancel!");
@@ -95,28 +107,32 @@ public class HomePageTabs extends SherlockFragmentActivity {
         Log.d("mina", "fetching server token...");
 
         showToast("connecting server...");
+
     }
 
+    /**
+     * called in onCreate
+     *
+     * @param savedInstanceState
+     */
     private void addTabs(Bundle savedInstanceState){
+
         mTabHost = (TabHost)findViewById(android.R.id.tabhost);
         mTabHost.setup();
 
-        mTabManager = new TabManager(this, mTabHost, R.id.realtabcontent){
-            @Override
-            public void onTabChanged(String tag) {
-                super.onTabChanged(tag);
-            }
-        };
-
+        mTabManager = new TabManager(this, mTabHost, R.id.realtabcontent);
 
         View explore = this.getLayoutInflater().inflate(R.layout.tab_menu_explore, null);
         mTabManager.addTab(mTabHost.newTabSpec("explore").setIndicator(explore),ExploreFrg.class, null);
 
+
         View group = this.getLayoutInflater().inflate(R.layout.tab_menu_group, null);
         mTabManager.addTab(mTabHost.newTabSpec("group").setIndicator(group), GroupFrg.class, null);
 
+
         View calendar = this.getLayoutInflater().inflate(R.layout.tab_menu_calendar, null);
         mTabManager.addTab(mTabHost.newTabSpec("calendar").setIndicator(calendar), CalendarFrg.class, null);
+
 
         //add badge
         //View message = TabUtils.renderTabView(this,R.layout.tab_menu_message,23);
@@ -130,6 +146,13 @@ public class HomePageTabs extends SherlockFragmentActivity {
         if (savedInstanceState != null) {
             mTabHost.setCurrentTabByTag(savedInstanceState.getString("tab"));
         }
+
+        lockTabButton(true);
+    }
+
+
+    private void lockTabButton(boolean lock) {
+        mTabHost.getTabWidget().setEnabled(!lock);
     }
 
 

@@ -2,7 +2,7 @@
 <resources>
 
     <string name="explore">探索</string>
-    <string name="group">圈子</string>
+    <string name="group">活动</string>
     <string name="calendar">日历</string>
     <string name="message">消息</string>
     <string name="me">俺的</string>

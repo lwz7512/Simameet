@@ -61,6 +61,9 @@ public class UserLoginTask extends TemplateTask{
             int state = resp.getRespState();
             Log.d("sima", "state value: "+state);
 
+            // invalid account
+            if (state != 0) return false;
+
             AccountParams account = new AccountParams();
             account.setAccountId(accountId);
             account.setSessionId(sessionId);

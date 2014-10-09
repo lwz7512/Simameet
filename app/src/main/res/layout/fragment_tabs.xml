@@ -30,7 +30,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-
+        <!-- tab switched content-->
         <FrameLayout
             android:id="@+id/realtabcontent"
             android:layout_width="match_parent"

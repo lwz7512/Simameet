@@ -34,7 +34,6 @@ public class ServerConfigTask extends TemplateTask {
     }
 
 
-
     @Override
     protected Boolean doInBackground(Void... params) {
         Log.d("mina", "to construct arq...");

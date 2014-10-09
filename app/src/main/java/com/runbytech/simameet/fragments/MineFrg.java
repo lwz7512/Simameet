@@ -3,6 +3,7 @@ package com.runbytech.simameet.fragments;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -34,15 +35,23 @@ public class MineFrg  extends SherlockFragment {
     public void onResume() {
         super.onResume();
 
+        Log.d("sima", "on resume...");
+
         Context ctx = this.getActivity();
 
         boolean guest_mode = HomeApp.checkGuestMode();
-        if(guest_mode){//not logged on
+        if(guest_mode){//not logged on, open login form
             Intent it = new Intent(ctx, LoginActivity.class);
             ctx.startActivity(it);
+        } else {
+            //TODO, fetching logged on user profile...
+
         }
 
+
+
     }
+
 
 
 

@@ -107,7 +107,7 @@ public class LoginActivity extends SherlockActivity implements LoaderCallbacks<C
     public void onResume(){
         super.onResume();//very important, loss it cause crash
 
-        //TODO, save for future
+        //TODO, save for future use
         SharedPreferences sp = getSharedPreferences("SP", Activity.MODE_PRIVATE);
         //存入数据
         SharedPreferences.Editor editor = sp.edit();
@@ -179,7 +179,6 @@ public class LoginActivity extends SherlockActivity implements LoaderCallbacks<C
             mAuthTask = new UserLoginTask(email, password){
 
                 public void callback(){
-                    HomeApp.loggedOn(true);
                     HomeApp.setGuestMode(false);
 
                     mAuthTask = null;
@@ -188,8 +187,10 @@ public class LoginActivity extends SherlockActivity implements LoaderCallbacks<C
                 }
 
                 public void failure(){
-                    mPasswordView.setError(getString(R.string.error_incorrect_password));
+                    mPasswordView.setError(getString(R.string.error_invalid_account));
                     mPasswordView.requestFocus();
+                    showProgress(false);
+                    mAuthTask = null;
                 }
 
                 public void pullback(){

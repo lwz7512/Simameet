@@ -6,9 +6,22 @@
     <drawable name="gray_darker_same_as_txt">#ff969696</drawable>
     <drawable name="gray_darker">#ff757575</drawable>
 
+    <color name="header_darker_bg">#ffFFFFFF</color>
+    <color name="header_text_bottom_line">#ff5CACEE</color>
+
     <color name="menu_textColor_selected">#ffe74242</color>
     <color name="menu_textColor_unselected">#ff757575</color>
 
     <color name="button_background_selected">#ffe74242</color>
     <color name="button_background_unselected">#FF6347</color>
+
+    <color name="header_normal">#ffe74c3c</color>
+    <color name="header_pressed">#ffCCCCCC</color>
+    <color name="menu_section_header">#FFDDDDDD</color>
+
+    <color name="group_header_bg">#ffEEEEEE</color>
+    <color name="group_header_text">#ffAAAAAA</color>
+
+    <color name="group_title_text">#ff999999</color>
+
 </resources>

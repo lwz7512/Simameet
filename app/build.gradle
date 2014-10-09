@@ -39,6 +39,7 @@ dependencies {
 
     compile 'com.google.android:support-v4:r7'
     compile 'com.actionbarsherlock:actionbarsherlock:4.4.0@aar'
+    compile 'se.emilsjolander:stickylistheaders:2.5.1'
 
     // *** DO NOT USE THESE CONFIG, OR CONFLICT WITH actionbarsherlock ***
     // You must install or update the Google Repository through the SDK manager to use this dependency.

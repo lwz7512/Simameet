@@ -10,6 +10,10 @@ import com.runbytech.simameet.config.AppConfig;
 import com.runbytech.simameet.tasks.ServerConfigTask;
 import com.runbytech.simameet.config.ServiceConfig;
 import com.runbytech.simameet.utils.DeviceUtil;
+import com.runbytech.simameet.utils.FileLogger;
+
+import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  * Created by liwenzhi on 14-9-22.
@@ -35,6 +39,10 @@ public class HomeApp extends Application {
      */
     public static StpClient api;
 
+    /**
+     * tab fragment data cache
+     */
+    public static HashMap<String, ArrayList<Object>> tfdCache;
 
 
     @Override
@@ -48,6 +56,16 @@ public class HomeApp extends Application {
 
         AppConfig.OS_VERSION = DeviceUtil.getDeviceOS();
         Log.d("mina", "os: "+AppConfig.OS_VERSION);
+
+        tfdCache = new HashMap<String, ArrayList<Object>>();
+    }
+
+    /**
+     * not called at all?
+     */
+    @Override
+    public void onTerminate() {
+        super.onTerminate();
 
     }
 
