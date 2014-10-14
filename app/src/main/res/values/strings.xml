@@ -15,5 +15,13 @@
     <string name="home_page">MainPage</string>
     <string name="title_activity_blank">BlankActivity</string>
     <string name="action_settings">Settings</string>
+    <string name="loading_data">加载数据...</string>
+    <string name="suffix_ren">人</string>
+    <string name="title_activity_action_details">ActionDetails</string>
+
+    <string name="account_join_suffix">人参加</string>
+
+    <string name="you_are_not_member">您还没有加入</string>
+    <string name="you_have_joined">您已经加入</string>
 
 </resources>

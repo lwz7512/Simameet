@@ -25,16 +25,14 @@ import android.widget.Toast;
 import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.runbytech.simameet.fragments.CalendarFrg;
 import com.runbytech.simameet.fragments.ExploreFrg;
-import com.runbytech.simameet.fragments.GroupFrg;
+import com.runbytech.simameet.fragments.MeetupFrg;
 import com.runbytech.simameet.fragments.MessageFrg;
 import com.runbytech.simameet.fragments.MineFrg;
 import com.runbytech.simameet.managers.TabManager;
 import com.runbytech.simameet.tasks.ServerConfigTask;
 import com.runbytech.simameet.utils.FileLogger;
 
-import java.util.Collection;
 import java.util.HashMap;
-import java.util.Iterator;
 
 /**
  * This demonstrates how you can implement switching between the tabs of a
@@ -70,14 +68,6 @@ public class HomePageTabs extends SherlockFragmentActivity {
         addTabs(savedInstanceState);
 
         if(HomeApp.checkGuestMode()) getServerConfig();//not logged on
-    }
-
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-//        HomeApp.setGuestMode(true);
-        FileLogger.writeLogFileToSDCard("INFO: app terminated!");
     }
 
 
@@ -127,7 +117,7 @@ public class HomePageTabs extends SherlockFragmentActivity {
 
 
         View group = this.getLayoutInflater().inflate(R.layout.tab_menu_group, null);
-        mTabManager.addTab(mTabHost.newTabSpec("group").setIndicator(group), GroupFrg.class, null);
+        mTabManager.addTab(mTabHost.newTabSpec("group").setIndicator(group), MeetupFrg.class, null);
 
 
         View calendar = this.getLayoutInflater().inflate(R.layout.tab_menu_calendar, null);
@@ -166,6 +156,15 @@ public class HomePageTabs extends SherlockFragmentActivity {
     private void showToast(String msg) {
         Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
     }
+
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+//        HomeApp.setGuestMode(true);
+        FileLogger.writeLogFileToSDCard("INFO: app terminated!");
+    }
+
 
 }
 

@@ -5,13 +5,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.IconButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.runbytech.simameet.R;
-import com.runbytech.simameet.vo.GroupAction;
+import com.runbytech.simameet.utils.TimeUtil;
+import com.runbytech.simameet.vo.MeetupVO;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -23,13 +24,15 @@ import se.emilsjolander.stickylistheaders.StickyListHeadersAdapter;
  */
 public class GroupAdapter extends BaseAdapter implements StickyListHeadersAdapter {
 
-//    private String[] countries;
     private LayoutInflater inflater;
     private ArrayList<Object> activities;
 
-    public static final DateFormat AGO_FULL_DATE_FORMATTER = new SimpleDateFormat("MM-dd");
+
+
+    private Context ctx;
 
     public GroupAdapter(Context context) {
+        this.ctx = context;
         inflater = LayoutInflater.from(context);
         activities = new ArrayList<Object>();
     }
@@ -57,17 +60,28 @@ public class GroupAdapter extends BaseAdapter implements StickyListHeadersAdapte
             holder = new ViewHolder();
             convertView = inflater.inflate(R.layout.group_list_item, parent, false);
 
-            holder.text = (TextView) convertView.findViewById(R.id.group_action_name);
+            holder.ActionTimeText = (TextView) convertView.findViewById(R.id.group_action_time);
+            holder.ActionNameText = (TextView) convertView.findViewById(R.id.group_action_name);
+            holder.groupNameText = (TextView) convertView.findViewById(R.id.group_title);
+            holder.ActionMumberText = (TextView) convertView.findViewById(R.id.group_action_member);
+            holder.joinBtn = (IconButton) convertView.findViewById(R.id.join_action_btn);
+            holder.joinBtn.setOnClickListener(new JoinButtonListener(position));
+
             convertView.setTag(holder);
         } else {
             holder = (ViewHolder) convertView.getTag();
         }
 
-        GroupAction ga = (GroupAction) activities.get(position);
-        holder.text.setText(ga.getActName());
+        MeetupVO ga = (MeetupVO) activities.get(position);
+        holder.ActionNameText.setText(ga.getActName());
+        holder.ActionTimeText.setText(TimeUtil.secondToHourMinute(ga.getStartTime()));
+        String ren = this.ctx.getString(R.string.suffix_ren);
+        holder.ActionMumberText.setText(String.valueOf(ga.getMemberNum())+ren);
+        holder.groupNameText.setText(ga.getClubName());
 
         return convertView;
     }
+
 
     @Override
     public View getHeaderView(int position, View convertView, ViewGroup parent) {
@@ -81,20 +95,16 @@ public class GroupAdapter extends BaseAdapter implements StickyListHeadersAdapte
             holder = (HeaderViewHolder) convertView.getTag();
         }
 
-        GroupAction ga = (GroupAction) activities.get(position);
+        MeetupVO ga = (MeetupVO) activities.get(position);
         int timestamp = ga.getStartTime();//second
-        long dtl = Long.valueOf(timestamp + "000") ;
-        Date dt = new Date(dtl);//millisecond
-
-        String headerText = AGO_FULL_DATE_FORMATTER.format(dt);
-
+        String headerText = TimeUtil.secondToMonDay(timestamp);
         holder.text.setText(headerText);
         return convertView;
     }
 
     @Override
     public long getHeaderId(int position) {
-        GroupAction ga = (GroupAction) activities.get(position);
+        MeetupVO ga = (MeetupVO) activities.get(position);
         int timestamp = ga.getStartTime();//second
         long dtl = Long.valueOf(timestamp + "000") ;
         Date dt = new Date(dtl);//millisecond
@@ -115,7 +125,11 @@ public class GroupAdapter extends BaseAdapter implements StickyListHeadersAdapte
     }
 
     class ViewHolder {
-        TextView text;
+        TextView ActionNameText;
+        TextView ActionMumberText;
+        TextView ActionTimeText;
+        TextView groupNameText;
+        IconButton joinBtn;
     }
 
 
@@ -124,5 +138,23 @@ public class GroupAdapter extends BaseAdapter implements StickyListHeadersAdapte
         this.notifyDataSetChanged();
     }
 
+
+    private class JoinButtonListener implements View.OnClickListener{
+        private int position ;
+
+        JoinButtonListener(int pos) {
+            position = pos;
+        }
+
+        @Override
+        public void onClick( View v) {
+            MeetupVO ga = (MeetupVO)getItem(position);
+            showToast("click on: "+ga.getActName());
+        }
+    }
+
+    private void showToast(String msg) {
+        Toast.makeText(ctx, msg, Toast.LENGTH_SHORT).show();
+    }
 
 }

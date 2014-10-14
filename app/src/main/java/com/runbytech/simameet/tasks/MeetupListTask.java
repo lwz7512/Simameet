@@ -6,7 +6,7 @@ import com.oct.ga.comm.cmd.club.ActivityQuerySubscribeReq;
 import com.oct.ga.comm.cmd.club.ActivityQuerySubscribeResp;
 import com.runbytech.simameet.HomeApp;
 import com.runbytech.simameet.utils.FileLogger;
-import com.runbytech.simameet.vo.GroupAction;
+import com.runbytech.simameet.vo.MeetupVO;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -17,7 +17,7 @@ import java.util.ArrayList;
 /**
  * Created by liwenzhi on 14-10-8.
  */
-public class GroupListTask extends TemplateTask {
+public class MeetupListTask extends TemplateTask {
 
     public ArrayList<Object> getActivities() {
         return activities;
@@ -25,7 +25,7 @@ public class GroupListTask extends TemplateTask {
 
     private ArrayList<Object> activities;
 
-    public GroupListTask(){
+    public MeetupListTask(){
         activities = new ArrayList<Object>();
     }
 
@@ -55,7 +55,7 @@ public class GroupListTask extends TemplateTask {
             JSONArray jacts = new JSONArray(groups);
 
             for(int i=0;i<jacts.length();i++){
-                GroupAction ga = GroupAction.parseJsonToObj(jacts.getJSONObject(i));
+                MeetupVO ga = MeetupVO.parseJsonToObj(jacts.getJSONObject(i));
                 activities.add(ga);
             }
 

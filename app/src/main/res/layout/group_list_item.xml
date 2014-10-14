@@ -1,41 +1,70 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent" android:layout_height="match_parent">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:descendantFocusability="blocksDescendants">
 
+    <!--action time-->
     <TextView android:id="@+id/group_action_time"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="20dp"
-        android:text="12:40"
         android:textColor="@color/group_title_text"/>
-
+    <!--action name-->
     <TextView android:id="@+id/group_action_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
-        android:paddingBottom="20dp"
+        android:paddingBottom="10dp"
         android:paddingTop="16dp"
-        android:layout_toRightOf="@+id/group_action_time"
-        android:textSize="18dp"/>
+        android:layout_toRightOf="@id/group_action_time"
+        android:textSize="18dp"
+        />
+
+    <!--action member number-->
+    <TextView android:id="@+id/group_action_member"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingTop="14dp"
+        android:paddingBottom="16dp"
+        android:layout_toRightOf="@id/group_action_time"
+        android:layout_below="@id/group_action_name"
+        android:textColor="@color/group_title_text"
+        />
+
+    <!--details navigate icon-->
+    <IconTextView android:id="@+id/group_detail_nav"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/group_action_name"
+        android:layout_alignParentRight="true"
+        android:padding="15dp"
+        android:text="{fa-chevron-right}"
+        android:textColor="@color/navigate_detail_color"/>
+
+    <!--join icon button-->
+    <IconButton android:id="@+id/join_action_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toLeftOf="@id/group_detail_nav"
+        android:layout_below="@id/group_action_name"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:text="{fa-plus-circle}"
+        android:focusable = "false"
+        style="@style/NormalButton_noborder"/>
+
 
     <TextView android:id="@+id/group_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_toRightOf="@+id/group_action_time"
-        android:layout_below="@+id/group_action_name"
-        android:text="#产品质量工作组"
-        android:textColor="@color/group_title_text"/>
+        android:layout_toRightOf="@id/group_action_time"
+        android:layout_below="@id/group_action_member"
+        android:paddingBottom="10dp"
+        android:textColor="@color/group_title_text"
+        />
 
-    <TextView android:id="@+id/group_action_member"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:paddingBottom="20dp"
-        android:paddingTop="20dp"
-        android:layout_toRightOf="@+id/group_action_time"
-        android:layout_below="@+id/group_title"
-        android:text="5人"
-        android:textColor="@color/group_title_text"/>
 
 
 

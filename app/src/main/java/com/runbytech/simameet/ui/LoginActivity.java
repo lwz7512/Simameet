@@ -2,7 +2,6 @@ package com.runbytech.simameet.ui;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
-import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.LoaderManager.LoaderCallbacks;
 import android.content.CursorLoader;
@@ -10,9 +9,9 @@ import android.content.Loader;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.net.Uri;
-
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.provider.ContactsContract;
 import android.text.TextUtils;
 import android.util.Log;
@@ -26,14 +25,14 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.actionbarsherlock.app.SherlockActivity;
 import com.runbytech.simameet.HomeApp;
 import com.runbytech.simameet.R;
 import com.runbytech.simameet.tasks.UserLoginTask;
 import com.runbytech.simameet.utils.EncryptUtil;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 /**
@@ -54,12 +53,16 @@ public class LoginActivity extends SherlockActivity implements LoaderCallbacks<C
     private View mProgressView;
     private View mLoginFormView;
 
+    // UI updater
+    private Handler handler;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
+        handler = new Handler();
 
         //hide app logo
         getSupportActionBar().setDisplayShowHomeEnabled(false);
@@ -100,6 +103,7 @@ public class LoginActivity extends SherlockActivity implements LoaderCallbacks<C
 
         mLoginFormView = findViewById(R.id.login_form);
         mProgressView = findViewById(R.id.login_progress);
+
     }
 
 
@@ -182,7 +186,7 @@ public class LoginActivity extends SherlockActivity implements LoaderCallbacks<C
                     HomeApp.setGuestMode(false);
 
                     mAuthTask = null;
-                    showProgress(false);
+                    hideProgress();
                     close();
                 }
 
@@ -215,7 +219,7 @@ public class LoginActivity extends SherlockActivity implements LoaderCallbacks<C
     /**
      * Shows the progress UI and hides the login form.
      */
-    @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
+    
     public void showProgress(final boolean show) {
         // On Honeycomb MR2 we have the ViewPropertyAnimator APIs, which allow
         // for very easy animations. If available, use these APIs to fade-in
@@ -246,6 +250,10 @@ public class LoginActivity extends SherlockActivity implements LoaderCallbacks<C
             mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
             mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
         }
+    }
+
+    private void hideProgress() {
+        mProgressView.setVisibility(View.GONE);
     }
 
     @Override
@@ -310,10 +318,22 @@ public class LoginActivity extends SherlockActivity implements LoaderCallbacks<C
         HomeApp.setGuestMode(false);//manually set app account mode, do not log in
     }
 
-
+    /**
+     * @deprecated
+     */
+    private void lazyClose() {
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                close();
+            }
+        }, 100);
+    }
 
     private void close(){
+
         finish();
+        overridePendingTransition(R.anim.in_from_left, R.anim.out_from_right);
     }
 
 

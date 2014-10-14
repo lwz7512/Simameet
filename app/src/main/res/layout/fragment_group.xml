@@ -4,14 +4,15 @@
     android:layout_height="match_parent" >
 
     <!-- Login progress -->
-    <ProgressBar
-        android:id="@+id/group_fetching_progress"
-        style="?android:attr/progressBarStyleLarge"
+    <!--progress text in relative layout-->
+    <TextView
+        android:id="@+id/data_fetching_progress"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
+        android:layout_marginTop="20dp"
         android:visibility="gone"
-        android:layout_centerHorizontal="true"/>
+        android:layout_centerHorizontal="true"
+        android:text="@string/loading_data"/>
 
     <se.emilsjolander.stickylistheaders.StickyListHeadersListView
         android:id="@+id/group_list"

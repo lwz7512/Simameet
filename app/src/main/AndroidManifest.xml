@@ -3,15 +3,15 @@
     package="com.runbytech.simameet" >
 
     <uses-sdk
-        android:minSdkVersion="14"
-        android:targetSdkVersion="19" />
+        android:minSdkVersion="11"
+        android:targetSdkVersion="14" />
 
     <application
         android:name=".HomeApp"
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
-        android:theme="@style/Theme.Styled" ><!--use custom theme-->
+        android:theme="@style/Theme.Styled" > <!-- use custom theme -->
         <activity
             android:name=".HomePageTabs"
             android:label="@string/app_name" >
@@ -29,7 +29,11 @@
         <activity
             android:name=".ui.BlankActivity"
             android:label="@string/title_activity_blank"
-            android:launchMode="singleTop">
+            android:launchMode="singleTop" >
+        </activity>
+        <activity
+            android:name=".ui.MeetupDetails"
+            android:label="@string/title_activity_action_details" >
         </activity>
     </application>
 
@@ -38,13 +42,13 @@
     <uses-permission android:name="android.permission.READ_PROFILE" />
     <uses-permission android:name="android.permission.READ_CONTACTS" />
 
-    <!--to get device id-->
+    <!-- to get device id -->
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
 
-    <!--access internet-->
+    <!-- access internet -->
     <uses-permission android:name="android.permission.INTERNET" />
 
-    <!--write log-->
+    <!-- write log -->
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
 </manifest>

@@ -1,30 +1,45 @@
 package com.runbytech.simameet.fragments;
 
-import android.content.Context;
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.Toast;
 
 import com.actionbarsherlock.app.SherlockFragment;
 import com.runbytech.simameet.HomeApp;
 import com.runbytech.simameet.R;
 import com.runbytech.simameet.adapters.GroupAdapter;
-import com.runbytech.simameet.tasks.GroupListTask;
+import com.runbytech.simameet.tasks.MeetupListTask;
+import com.runbytech.simameet.ui.MeetupDetails;
 import com.runbytech.simameet.ui.LoginActivity;
+import com.runbytech.simameet.vo.MeetupVO;
 
 import se.emilsjolander.stickylistheaders.StickyListHeadersListView;
 
-public class GroupFrg extends SherlockFragment {
+
+/**
+ * correspond to Activity menu in bottom
+ */
+public class MeetupFrg extends SherlockFragment implements AdapterView.OnItemClickListener{
 
     private GroupAdapter adapter;
     private View mProgressView;
-    private GroupListTask task;
+    private MeetupListTask task;
 
     private static String THIS = "groupFrg";
+
+    private Activity ctx;
+
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        this.ctx = activity;
+    }
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -32,9 +47,10 @@ public class GroupFrg extends SherlockFragment {
 
 		View view = inflater.inflate(R.layout.fragment_group, container, false);
 
-        mProgressView = view.findViewById(R.id.group_fetching_progress);
+        mProgressView = view.findViewById(R.id.data_fetching_progress);
 
         StickyListHeadersListView stickyList = (StickyListHeadersListView) view.findViewById(R.id.group_list);
+        stickyList.setOnItemClickListener(this);
         adapter = new GroupAdapter(this.getActivity());
         stickyList.setAdapter(adapter);
 
@@ -60,15 +76,16 @@ public class GroupFrg extends SherlockFragment {
             return;
         }
 
-        Context ctx = this.getActivity();
+
         //check login status
         boolean guest_mode = HomeApp.checkGuestMode();
         if(guest_mode){//not logged on, open login form
             Intent it = new Intent(ctx, LoginActivity.class);
-            ctx.startActivity(it);
+            this.ctx.startActivity(it);
+            this.ctx.overridePendingTransition(R.anim.in_from_right, R.anim.out_from_left);
         } else {
             //fetching activities...
-            task = new GroupListTask(){
+            task = new MeetupListTask(){
                 public void callback(){
                     showProgress(false);
 
@@ -89,10 +106,30 @@ public class GroupFrg extends SherlockFragment {
                     task = null;
                 }
             };
-            task.execute((Void)null);
+            task.execute();
             showProgress(true);
         }
  
+    }
+
+    /**
+     * navigate to activity details page...
+     *
+     * @param parent
+     * @param view
+     * @param position
+     * @param id
+     */
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        Intent it = new Intent();
+        it.setClass(this.ctx, MeetupDetails.class);
+        MeetupVO ga = (MeetupVO)adapter.getItem(position);
+        it.putExtra("meetupName", ga.getActName());
+        it.putExtra("meetupId", ga.getActId());
+        it.putExtra("isMember", ga.getIsMember());
+        this.ctx.startActivity(it);
+        this.ctx.overridePendingTransition(R.anim.in_from_right, R.anim.out_from_left);
     }
 
     private void showToast(String msg) {

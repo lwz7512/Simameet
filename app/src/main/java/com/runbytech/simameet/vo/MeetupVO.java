@@ -6,7 +6,7 @@ import org.json.JSONObject;
 /**
  * Created by liwenzhi on 14-10-8.
  */
-public class GroupAction {
+public class MeetupVO {
 
     private String clubId;
     private String clubName;
@@ -17,6 +17,21 @@ public class GroupAction {
     private int recommendNum;
     private int startTime;
     private int state;
+
+    public static MeetupVO parseJsonToObj(JSONObject json) throws JSONException {
+        MeetupVO ga = new MeetupVO();
+        ga.setActId(json.getString("id"));
+        ga.setActName(json.getString("name"));
+        ga.setClubId(json.getString("clubId"));
+        ga.setClubName(json.getString("clubName"));
+        ga.setIsMember(json.getInt("isMember"));
+        ga.setMemberNum(json.getInt("memberNum"));
+        ga.setRecommendNum(json.getInt("recommendNum"));
+        ga.setStartTime(json.getInt("startTime"));
+        ga.setState(json.getInt("state"));
+
+        return ga;
+    }
 
     public String getClubId() {
         return clubId;
@@ -90,20 +105,6 @@ public class GroupAction {
         this.state = state;
     }
 
-    public static GroupAction parseJsonToObj(JSONObject json) throws JSONException {
-        GroupAction ga = new GroupAction();
-        ga.setActId(json.getString("id"));
-        ga.setActName(json.getString("name"));
-        ga.setClubId(json.getString("clubId"));
-        ga.setClubName(json.getString("clubName"));
-        ga.setIsMember(json.getInt("isMember"));
-        ga.setMemberNum(json.getInt("memberNum"));
-        ga.setRecommendNum(json.getInt("recommendNum"));
-        ga.setStartTime(json.getInt("startTime"));
-        ga.setState(json.getInt("state"));
-
-        return ga;
-    }
 
 
 }

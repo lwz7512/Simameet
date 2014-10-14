@@ -12,6 +12,7 @@ import com.runbytech.simameet.HomeApp;
 import com.runbytech.simameet.config.AppConfig;
 import com.runbytech.simameet.config.ServiceConfig;
 import com.runbytech.simameet.utils.DeviceUtil;
+import com.runbytech.simameet.utils.NetworkUtil;
 import com.runbytech.simameet.vo.AccountParams;
 
 import java.io.UnsupportedEncodingException;
@@ -62,7 +63,7 @@ public class UserLoginTask extends TemplateTask{
             Log.d("sima", "state value: "+state);
 
             // invalid account
-            if (state != 0) return false;
+            if (state != NetworkUtil.RESPONSE_OK) return false;
 
             AccountParams account = new AccountParams();
             account.setAccountId(accountId);

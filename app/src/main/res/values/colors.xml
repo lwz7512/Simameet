@@ -24,4 +24,13 @@
 
     <color name="group_title_text">#ff999999</color>
 
+    <color name="ab_item">#FFFFFFFF</color>
+    <color name="grey_light">#FFEFEFEF</color>
+    <color name="text">#FF666666</color>
+    <color name="text_darker">#FF333333</color>
+
+    <color name="blue">#FF3fa9f5</color>
+
+    <color name="navigate_detail_color">#ffCCCCCC</color>
+
 </resources>
