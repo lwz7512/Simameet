@@ -118,4 +118,13 @@ public class TabManager implements TabHost.OnTabChangeListener {
         }
     }
 
+    /**
+     * get current fragment to interactive
+     *
+     * @return
+     */
+    public Fragment currentFragment() {
+        return mLastTab.fragment;
+    }
+
 }

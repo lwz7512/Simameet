@@ -21,7 +21,7 @@ import android.widget.TextView;
  */
 public class ExpandableTextView extends TextView {
   
-	private String mEllipsis = "\u2026\u25BC";
+	private String mEllipsis = "\u2026\u25BC";//...\/
 
 	private static final String TAG = ExpandableTextView.class.getSimpleName();
 	
@@ -30,7 +30,10 @@ public class ExpandableTextView extends TextView {
 	private CharSequence mOriginalText;
 	
 	private static final String sMaximumVarName = "mMaximum";
-	
+
+    //add this flag to block toggle while not truncated
+    //@2014/10/15
+    private boolean truncated = false;
 	
 	/**
 	 * @param context
@@ -93,6 +96,8 @@ public class ExpandableTextView extends TextView {
 
 
 	private final void toggle(ExpandableTextView etv) {
+        if(!truncated) return;//block expand switch
+
 		if (etv.isExpanded()) {
 			Log.w(TAG, TAG + " is collapsed.");
 			etv.collapse();
@@ -134,6 +139,8 @@ public class ExpandableTextView extends TextView {
 				
 				ssb.append(mEllipsis);
 				setText(ssb.toString());
+
+                truncated = true;
 			}
 		}
 	}

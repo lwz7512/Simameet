@@ -24,4 +24,7 @@
     <string name="you_are_not_member">您还没有加入</string>
     <string name="you_have_joined">您已经加入</string>
 
+    <string name="join_meetup_success">加入成功！</string>
+    <string name="join_meetup_failure">加入失败！</string>
+
 </resources>

@@ -22,7 +22,7 @@ public class AppConfig {
     public static String APP_VERSION = "Sweden-0.0.1";
 
     /**
-     * initialized in UserLoginTask;
+     * logged on user, initialized in UserLoginTask;
      */
     public static AccountParams account;
 

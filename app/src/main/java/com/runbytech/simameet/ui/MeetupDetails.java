@@ -2,21 +2,28 @@ package com.runbytech.simameet.ui;
 
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 import android.widget.IconButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.actionbarsherlock.app.SherlockActivity;
 import com.actionbarsherlock.view.MenuItem;
+import com.actionbarsherlock.view.Window;
+import com.runbytech.simameet.HomeApp;
 import com.runbytech.simameet.R;
+import com.runbytech.simameet.fragments.MeetupFrg;
+import com.runbytech.simameet.tasks.JoinMeetupTask;
 import com.runbytech.simameet.tasks.MeetupDetailsTask;
 import com.runbytech.simameet.utils.FileLogger;
-import com.runbytech.simameet.utils.ScreenUtils;
 import com.runbytech.simameet.utils.TimeUtil;
 import com.runbytech.simameet.vo.MeetupDetailsVO;
+import com.runbytech.simameet.vo.MeetupVO;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.ArrayList;
 
 public class MeetupDetails extends SherlockActivity {
 
@@ -25,11 +32,14 @@ public class MeetupDetails extends SherlockActivity {
     private MeetupDetailsTask task;
     private View mProgressView;
 
+    private TextView joinStatus;
+    private IconButton joinBtn;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
         setContentView(R.layout.meetup_details);
 
         mProgressView = findViewById(R.id.data_fetching_progress);
@@ -43,12 +53,12 @@ public class MeetupDetails extends SherlockActivity {
         String meetupName = getIntent().getStringExtra("meetupName");
         getSupportActionBar().setTitle(meetupName);
 
-        executeTask();
+        executeDetailTask();
 
     }
 
 
-    private void executeTask() {
+    private void executeDetailTask() {
         String meetupId = getIntent().getStringExtra("meetupId");
         task = new MeetupDetailsTask(meetupId){
             public void callback(){
@@ -109,8 +119,10 @@ public class MeetupDetails extends SherlockActivity {
             e.printStackTrace();
         }
 
-        TextView joinStatus = (TextView) findViewById(R.id.joinStatus);
-        IconButton joinBtn = (IconButton) findViewById(R.id.join_meetup_btn);
+        //save to global to user later
+        joinStatus = (TextView) findViewById(R.id.joinStatus);
+        joinBtn = (IconButton) findViewById(R.id.join_meetup_btn);
+
         int isMember = getIntent().getIntExtra("isMember", 0);
         if(isMember != 0){
             joinStatus.setText(R.string.you_have_joined);
@@ -119,8 +131,61 @@ public class MeetupDetails extends SherlockActivity {
             joinStatus.setText(R.string.you_are_not_member);
             joinBtn.setVisibility(View.VISIBLE);
         }
-        //showToast("isMember: "+isMember);
+        joinBtn.setOnClickListener(new JoinButtonListener(details.getId(),joinBtn));
 
+        //TODO, add organizer avatar ...
+
+    }
+
+    private class  JoinButtonListener implements View.OnClickListener{
+        private String meetupId;
+        private Button owner;
+
+        public JoinButtonListener(String meetupId, Button btn){
+            this.meetupId = meetupId;
+            this.owner = btn;
+        }
+        @Override
+        public void onClick( View v) {
+            JoinMeetupTask task = new JoinMeetupTask(meetupId){
+                public void callback(){
+                    showHeaderProgress(false);
+                    showToast(R.string.join_meetup_success);
+
+                    joinStatus.setText(R.string.you_have_joined);
+                    joinBtn.setVisibility(View.GONE);
+
+                    updateMeetupCache(meetupId);
+                }
+
+                public void failure(){
+                    showHeaderProgress(false);
+                    showToast(R.string.join_meetup_failure);
+                }
+
+                public void pullback(){
+                    showHeaderProgress(false);
+                }
+            };
+            task.execute();
+            showHeaderProgress(true);
+            this.owner.setEnabled(false);
+            this.owner.setAlpha(0.2f);
+        }
+    }
+
+    private void updateMeetupCache(String meetupId){
+        //refresh cache
+        ArrayList<MeetupVO> meetups = (ArrayList)HomeApp.tfdCache.get(MeetupFrg.THIS_KEY);
+        for (MeetupVO mv : meetups){
+            if(mv.getActId().equals(meetupId)){
+                mv.setIsMember(1);//joined!
+            }
+        }
+    }
+
+    public void showHeaderProgress(boolean show){
+        setSupportProgressBarIndeterminateVisibility(show);
     }
 
     @Override
@@ -162,5 +227,9 @@ public class MeetupDetails extends SherlockActivity {
         }
     }
 
+
+    private void showToast(int msg) {
+        Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
+    }
 
 }

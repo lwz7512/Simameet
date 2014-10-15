@@ -314,8 +314,8 @@ public class LoginActivity extends SherlockActivity implements LoaderCallbacks<C
     @Override
     public  void onBackPressed(){
         super.onBackPressed();
-
-        HomeApp.setGuestMode(false);//manually set app account mode, do not log in
+        //***** manually set app account mode, do not log in *****
+        HomeApp.setGuestMode(false);
     }
 
     /**

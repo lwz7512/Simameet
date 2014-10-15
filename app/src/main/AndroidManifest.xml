@@ -3,8 +3,8 @@
     package="com.runbytech.simameet" >
 
     <uses-sdk
-        android:minSdkVersion="11"
-        android:targetSdkVersion="14" />
+        android:minSdkVersion="14"
+        android:targetSdkVersion="19" />
 
     <application
         android:name=".HomeApp"

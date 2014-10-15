@@ -23,6 +23,8 @@ import android.widget.TabHost;
 import android.widget.Toast;
 
 import com.actionbarsherlock.app.SherlockFragmentActivity;
+import com.actionbarsherlock.view.Window;
+import com.runbytech.simameet.actions.FragmentTab;
 import com.runbytech.simameet.fragments.CalendarFrg;
 import com.runbytech.simameet.fragments.ExploreFrg;
 import com.runbytech.simameet.fragments.MeetupFrg;
@@ -50,20 +52,21 @@ public class HomePageTabs extends SherlockFragmentActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        //This has to be called before setContentView and you must use the
+        //class in com.actionbarsherlock.view and NOT android.view
+        requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
         setContentView(R.layout.fragment_tabs);
 
+//        setSupportProgressBarIndeterminateVisibility(true);
         //hide app title
 //        getSupportActionBar().setDisplayShowTitleEnabled(false);
-
-        //hide app logo
-        getSupportActionBar().setDisplayShowHomeEnabled(false);
-
-
         //custom header bar
 //        getSupportActionBar().setDisplayShowCustomEnabled(true);
 //        getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
 //        getSupportActionBar().setCustomView(R.layout.cener_title);
+
+        //hide app logo
+        getSupportActionBar().setDisplayShowHomeEnabled(false);
 
         addTabs(savedInstanceState);
 
@@ -75,6 +78,9 @@ public class HomePageTabs extends SherlockFragmentActivity {
     protected void onResume() {
         super.onResume();
         if (!HomeApp.checkGuestMode()) lockTabButton(false);//logged on
+
+        FragmentTab current = (FragmentTab)mTabManager.currentFragment();
+        current.forceUpdate();
     }
 
 
@@ -162,7 +168,7 @@ public class HomePageTabs extends SherlockFragmentActivity {
     protected void onDestroy() {
         super.onDestroy();
 //        HomeApp.setGuestMode(true);
-        FileLogger.writeLogFileToSDCard("INFO: app terminated!");
+//        FileLogger.writeLogFileToSDCard("INFO: app terminated!");
     }
 
 

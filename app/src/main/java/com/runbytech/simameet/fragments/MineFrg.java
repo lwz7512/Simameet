@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import com.actionbarsherlock.app.SherlockFragment;
 import com.runbytech.simameet.HomeApp;
 import com.runbytech.simameet.R;
+import com.runbytech.simameet.actions.FragmentTab;
 import com.runbytech.simameet.ui.LoginActivity;
 
 /**
@@ -20,7 +21,7 @@ import com.runbytech.simameet.ui.LoginActivity;
  * So, any activity can start it!
  *
  */
-public class MineFrg  extends SherlockFragment {
+public class MineFrg  extends SherlockFragment implements FragmentTab{
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -52,7 +53,9 @@ public class MineFrg  extends SherlockFragment {
 
     }
 
+    public void forceUpdate() {
 
+    }
 
 
 }

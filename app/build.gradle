@@ -6,7 +6,7 @@ android {
     buildToolsVersion '20.0.0'
     defaultConfig {
         applicationId 'com.runbytech.simameet'
-        minSdkVersion 11
+        minSdkVersion 14
         targetSdkVersion 14
         versionCode 1
         versionName '1.0'

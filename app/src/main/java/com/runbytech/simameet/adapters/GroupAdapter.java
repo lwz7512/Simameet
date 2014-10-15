@@ -5,11 +5,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.Button;
 import android.widget.IconButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.runbytech.simameet.R;
+import com.runbytech.simameet.tasks.JoinMeetupTask;
 import com.runbytech.simameet.utils.TimeUtil;
 import com.runbytech.simameet.vo.MeetupVO;
 
@@ -27,9 +29,9 @@ public class GroupAdapter extends BaseAdapter implements StickyListHeadersAdapte
     private LayoutInflater inflater;
     private ArrayList<Object> activities;
 
-
-
     private Context ctx;
+    private JoinMeetupTask task;
+
 
     public GroupAdapter(Context context) {
         this.ctx = context;
@@ -65,7 +67,7 @@ public class GroupAdapter extends BaseAdapter implements StickyListHeadersAdapte
             holder.groupNameText = (TextView) convertView.findViewById(R.id.group_title);
             holder.ActionMumberText = (TextView) convertView.findViewById(R.id.group_action_member);
             holder.joinBtn = (IconButton) convertView.findViewById(R.id.join_action_btn);
-            holder.joinBtn.setOnClickListener(new JoinButtonListener(position));
+            holder.joinBtn.setOnClickListener(new JoinButtonListener(position,holder.joinBtn));
 
             convertView.setTag(holder);
         } else {
@@ -75,9 +77,15 @@ public class GroupAdapter extends BaseAdapter implements StickyListHeadersAdapte
         MeetupVO ga = (MeetupVO) activities.get(position);
         holder.ActionNameText.setText(ga.getActName());
         holder.ActionTimeText.setText(TimeUtil.secondToHourMinute(ga.getStartTime()));
-        String ren = this.ctx.getString(R.string.suffix_ren);
+        String ren = this.ctx.getString(R.string.account_join_suffix);
         holder.ActionMumberText.setText(String.valueOf(ga.getMemberNum())+ren);
         holder.groupNameText.setText(ga.getClubName());
+
+        if (ga.getIsMember()==1){
+            holder.joinBtn.setVisibility(View.GONE);
+        }else {
+            holder.joinBtn.setVisibility(View.VISIBLE);
+        }
 
         return convertView;
     }
@@ -138,22 +146,66 @@ public class GroupAdapter extends BaseAdapter implements StickyListHeadersAdapte
         this.notifyDataSetChanged();
     }
 
+    public void clear(){
+        this.activities.clear();
+        this.notifyDataSetChanged();
+    }
+
 
     private class JoinButtonListener implements View.OnClickListener{
         private int position ;
+        private Button owner;
 
-        JoinButtonListener(int pos) {
+        JoinButtonListener(int pos, Button btn) {
             position = pos;
+            this.owner = btn;
         }
 
         @Override
         public void onClick( View v) {
             MeetupVO ga = (MeetupVO)getItem(position);
-            showToast("click on: "+ga.getActName());
+            join(ga.getActId());
+
+            this.owner.setEnabled(false);
+            this.owner.setAlpha(0.2f);
         }
     }
 
+
+    private void join(String meetupId) {
+        task = new JoinMeetupTask(meetupId){
+            public void callback(){
+                showHeaderProgress(false);
+                showToast(R.string.join_meetup_success);
+            }
+
+            public void failure(){
+                showHeaderProgress(false);
+                showToast(R.string.join_meetup_failure);
+            }
+
+            public void pullback(){
+                showHeaderProgress(false);
+            }
+        };
+        task.execute();
+        //show progress, and disable the button
+        showHeaderProgress(true);
+
+    }
+
+    /**
+     * callback method by outter class
+     */
+    public void showHeaderProgress(boolean show){
+
+    }
+
     private void showToast(String msg) {
+        Toast.makeText(ctx, msg, Toast.LENGTH_SHORT).show();
+    }
+
+    private void showToast(int msg) {
         Toast.makeText(ctx, msg, Toast.LENGTH_SHORT).show();
     }
 

@@ -6,8 +6,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import com.actionbarsherlock.app.SherlockFragment;
 import com.runbytech.simameet.R;
+import com.runbytech.simameet.actions.FragmentTab;
 
-public class ExploreFrg extends SherlockFragment {
+public class ExploreFrg extends SherlockFragment implements FragmentTab{
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -22,5 +23,9 @@ public class ExploreFrg extends SherlockFragment {
 		super.onSaveInstanceState(outState);
 		setUserVisibleHint(true);
 	}
+
+    public void forceUpdate() {
+
+    }
 
 }

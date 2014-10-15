@@ -8,16 +8,22 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.ListView;
 import android.widget.Toast;
 
 import com.actionbarsherlock.app.SherlockFragment;
+import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.runbytech.simameet.HomeApp;
 import com.runbytech.simameet.R;
+import com.runbytech.simameet.actions.FragmentTab;
 import com.runbytech.simameet.adapters.GroupAdapter;
+import com.runbytech.simameet.config.AppConfig;
 import com.runbytech.simameet.tasks.MeetupListTask;
 import com.runbytech.simameet.ui.MeetupDetails;
 import com.runbytech.simameet.ui.LoginActivity;
 import com.runbytech.simameet.vo.MeetupVO;
+
+import java.util.ArrayList;
 
 import se.emilsjolander.stickylistheaders.StickyListHeadersListView;
 
@@ -25,20 +31,31 @@ import se.emilsjolander.stickylistheaders.StickyListHeadersListView;
 /**
  * correspond to Activity menu in bottom
  */
-public class MeetupFrg extends SherlockFragment implements AdapterView.OnItemClickListener{
+public class MeetupFrg extends SherlockFragment implements AdapterView.OnItemClickListener, FragmentTab{
 
+    public static String THIS_KEY = "MeetupFrg";
+
+    private SherlockFragmentActivity ctx;
     private GroupAdapter adapter;
+    private StickyListHeadersListView stickyList;
     private View mProgressView;
+
     private MeetupListTask task;
 
-    private static String THIS = "groupFrg";
 
-    private Activity ctx;
+    public void forceUpdate() {
+        //use caceh data
+        if (HomeApp.tfdCache.containsKey(THIS_KEY)){
+            adapter.refresh(HomeApp.tfdCache.get(THIS_KEY));
+            showToast("force update!");
+        }
+    }
 
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-        this.ctx = activity;
+        this.ctx = (SherlockFragmentActivity)activity;
+        Log.d("sima", this.ctx.getLocalClassName());
     }
 
 	@Override
@@ -49,9 +66,14 @@ public class MeetupFrg extends SherlockFragment implements AdapterView.OnItemCli
 
         mProgressView = view.findViewById(R.id.data_fetching_progress);
 
-        StickyListHeadersListView stickyList = (StickyListHeadersListView) view.findViewById(R.id.group_list);
+        stickyList = (StickyListHeadersListView) view.findViewById(R.id.group_list);
         stickyList.setOnItemClickListener(this);
-        adapter = new GroupAdapter(this.getActivity());
+        adapter = new GroupAdapter(this.getActivity()){
+            @Override
+            public void showHeaderProgress(boolean show){
+                ctx.setSupportProgressBarIndeterminateVisibility(show);
+            }
+        };
         stickyList.setAdapter(adapter);
 
         Log.d("sima", "Group fragment create...");
@@ -71,11 +93,12 @@ public class MeetupFrg extends SherlockFragment implements AdapterView.OnItemCli
 
         if(task != null) return;
         if(adapter.getCount() != 0) return;
-        if (HomeApp.tfdCache.containsKey(THIS)){
-            adapter.refresh(HomeApp.tfdCache.get(THIS));
+
+        //use caceh data
+        if (HomeApp.tfdCache.containsKey(THIS_KEY)){
+            adapter.refresh(HomeApp.tfdCache.get(THIS_KEY));
             return;
         }
-
 
         //check login status
         boolean guest_mode = HomeApp.checkGuestMode();
@@ -84,33 +107,41 @@ public class MeetupFrg extends SherlockFragment implements AdapterView.OnItemCli
             this.ctx.startActivity(it);
             this.ctx.overridePendingTransition(R.anim.in_from_right, R.anim.out_from_left);
         } else {
-            //fetching activities...
-            task = new MeetupListTask(){
-                public void callback(){
-                    showProgress(false);
-
-                    adapter.refresh(task.getActivities());
-                    HomeApp.tfdCache.put(THIS, task.getActivities());
-
-                    task = null;
-                }
-
-                public void failure(){
-                    showProgress(false);
-                    showToast("fetch activities failure!");
-                    task = null;
-                }
-
-                public void pullback(){
-                    showProgress(false);
-                    task = null;
-                }
-            };
-            task.execute();
-            showProgress(true);
+            fetch();
         }
  
     }
+
+
+    private void fetch() {
+        if(AppConfig.account == null) return;//not logged on
+
+        //fetching activities...
+        task = new MeetupListTask(){
+            public void callback(){
+                showProgress(false);
+
+                adapter.refresh(task.getActivities());
+                HomeApp.tfdCache.put(THIS_KEY, task.getActivities());//cache result
+
+                task = null;
+            }
+
+            public void failure(){
+                showProgress(false);
+                showToast("fetch activities failure!");
+                task = null;
+            }
+
+            public void pullback(){
+                showProgress(false);
+                task = null;
+            }
+        };
+        task.execute();
+        showProgress(true);
+    }
+
 
     /**
      * navigate to activity details page...
@@ -130,6 +161,7 @@ public class MeetupFrg extends SherlockFragment implements AdapterView.OnItemCli
         it.putExtra("isMember", ga.getIsMember());
         this.ctx.startActivity(it);
         this.ctx.overridePendingTransition(R.anim.in_from_right, R.anim.out_from_left);
+
     }
 
     private void showToast(String msg) {
