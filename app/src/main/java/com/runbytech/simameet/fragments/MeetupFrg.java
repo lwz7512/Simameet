@@ -47,7 +47,6 @@ public class MeetupFrg extends SherlockFragment implements AdapterView.OnItemCli
         //use caceh data
         if (HomeApp.tfdCache.containsKey(THIS_KEY)){
             adapter.refresh(HomeApp.tfdCache.get(THIS_KEY));
-            showToast("force update!");
         }
     }
 
